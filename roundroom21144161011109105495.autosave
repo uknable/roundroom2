@@ -1,0 +1,66 @@
+let debug = true;
+
+function setup() {
+  createCanvas(1000, 600);
+
+
+
+}
+
+
+function draw() {
+
+  background(255);
+  
+  if (debug) {
+
+    fill(125);
+    stroke(255, 0, 0);
+    rect(0, 0, 900, 128); //front size of ceiling
+  
+    rect(0, 128, 400, 104); //front side of wall
+    rect(400, 128, 47, 28); //above front door
+    rect(447, 128, 403, 104); //back side of wall
+    rect(850, 128, 47, 28); //above back door
+    rect(897, 128, 3, 104); //bit beside back door
+  
+    rect(0, 232, 900, 18); //space inbetween
+  
+    rect(0, 250, 900, 128); //back side of ceiling
+  
+    rect(0, 378, 400, 104); //front side of wall
+    rect(400, 378, 47, 28); //above front door
+    rect(447, 378, 403, 104); //back side of wall
+    rect(850, 378, 47, 28); //above back door
+    rect(897, 378, 3, 104); //bit beside back door
+
+  }
+  
+  
+  noStroke();
+  fill(0);
+
+  
+
+  ellipse(tan(frameCount*0.01), tan(frameCount*0.01), 50);
+  
+  
+}
+
+class Comet {
+  constructor() {
+    
+    this.initx = random(900);
+    this.initY = random(232);
+
+    this.size = random(maxCometSize);
+
+  }
+    
+}
+
+class Particle {
+  constructor() {
+
+  }
+}
