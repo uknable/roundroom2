@@ -9,6 +9,8 @@ let minCometSize = 5;
 let maxCometSize = 15;
 
 let cometCD = 120;
+let minCometCD = 18;
+let cometCDRate = 2.1;
 let cometFire = 0;
 
 
@@ -26,6 +28,7 @@ function setup() {
   createCanvas(900, 600);
 
   notes = [ 
+    220, 246.94, 261.63, 293.66, 329.63, 349.23, 392.00,
     440, 493.883, 523.251, 587.33,  659.255, 698.456, 783.991
   ];
 
@@ -36,30 +39,8 @@ function setup() {
 
 
 function draw() {
-  /////////// BACKGROUND ///////////////////////////
-  // background(31, 37, 118);
-
+  
   image(bgImage, 0, 0, 900, 232);
-  
-  // for (let i=0; i<width ; i+=spaceBetweenCircles) {
-  //   for (let j=0; j<232; j+=spaceBetweenCircles) {
-
-  //       let colorLerp = i/width;
-
-  //       if (colorLerp < 0.5) {
-
-  //         let lerpedColor = lerpColor(red, purple, colorLerp);
-  
-  //         fill(lerpedColor);
-  //         ellipse(i, j, backgroundSize*sin(i+j+frameCount*blinkRate));
-        
-  //       } else {
-  //         let lerpedColor = lerpColor(purple, red, colorLerp);
-  
-  //         fill(lerpedColor);
-  //         ellipse(i, j, backgroundSize*sin(i+j+frameCount*blinkRate));
-  //       }
-  //   }
   
   fill(0);
   rect(0, 232, width, height-232);
@@ -92,14 +73,13 @@ function draw() {
   noStroke();
   fill(0);
 
-  // ellipse(sin(frameCount*0.1), sin(frameCount*0.1), 50);
-
   if (frameCount - cometFire >= cometCD) {
     print("pushing comet");
     let c = new Comet();
     comets.push(c);
 
-    cometFire = frameCount+random(60);
+    //cometFire = frameCount+random(60);
+    cometFire = frameCount;
 
     if (comets.length > 1) {
       comets[comets.length-1].starOsc.stop();
@@ -111,7 +91,7 @@ function draw() {
   };
 
   if (comets.length > 200) {
-    comets.subset(comets, 1, comets.length-1);
+    comets = comets.subset(comets, 1, comets.length-1);
   }
   
   
@@ -119,11 +99,10 @@ function draw() {
 
 class Comet {
   constructor() {
-    // this.initx = random(canvasWidth);
-    // this.initY = random(canvasHeight);
+
     this.initPos = [random(canvasWidth), canvasHeight];
     this.size = random(minCometSize, maxCometSize);
-    this.deathPoint = [random(900), random(232)];
+    this.deathPoint = [random(895), random(232)];
     this.velocity = random(0.001, 0.02);
     this.posLerper = 0;
     this.blinkRate = random(0.001, 0.01);
@@ -134,9 +113,9 @@ class Comet {
     this.osc.setType('triangle');
     this.osc.amp(0.3);
     this.osc.amp(0, 1);
-    // this.osc.start();
 
-    this.starSound = int(random(0, notes.length-1));
+
+    this.starSound = int(random(0, notes.length));
 
     this.starOsc = new p5.Oscillator();
     this.starOsc.setType('sine');
@@ -187,10 +166,10 @@ class Comet {
       
       this.playing = true;
 
-      if(cometCD > 20) {
-        cometCD -= 2;
+      if(cometCD > minCometCD) {
+        cometCD -= cometCDRate;
       } else {
-        cometCD = 20;
+        cometCD = minCometCD;
       }
       print(cometCD);
       
@@ -201,7 +180,7 @@ class Comet {
     ellipse(xPos, yPos+250, sin(frameCount*this.blinkRate)*this.size+5);
     ellipse(xPos, yPos, sin(frameCount*this.blinkRate)*this.size);
 
-    fill(255, 255, 85)
+    fill(255, 255, 85);
     ellipse(xPos, yPos, sin(frameCount*this.blinkRate)*this.size-5);
 
     
